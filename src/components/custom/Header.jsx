@@ -6,7 +6,7 @@ function Header() {
       <img src='/logo.svg'/>
      
      <div>
-      <Button className="px-6 py-3 text-xl rounded-sm shadow cursor-pointer">
+      <Button className="shadow cursor-pointer">
         Sign In
       </Button>
     </div>
