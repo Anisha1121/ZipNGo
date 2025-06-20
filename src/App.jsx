@@ -1,14 +1,16 @@
 import React from 'react';
 import './index.css';
 import { Button } from './components/ui/button'; // or '@/components/ui/button'
-
+import Hero from './components/custom/Hero.jsx'// Ensure the path is correct
+ // Ensure the path is correct
 function App() {
+  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-zinc-900 text-white">
-      <h1 className="text-4xl font-bold">ZipNGo</h1>
-      <Button>Get Started</Button>
-    </div>
+    <>
+    {/* <Hero/> */}
+    <Hero/>
+    </>
   );
 }
 
-export default App;
+export default Hero;
