@@ -12,7 +12,7 @@ function Hero() {
       
       
       <Link to="/create-trip">
-        <Button className="px-6 py-3 text-xl rounded-sm shadow cursor-pointer ">Get started for free</Button>
+        <Button className="px-6 py-3 rounded-sm shadow cursor-pointer ">Get started for free</Button>
       </Link>
     </div>
   )
