@@ -3,12 +3,13 @@ import { Input } from '@/components/ui/input'
 import { SelectBudgetOptions, SelectTravelList } from '@/constants/options';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
-
-
+import { toast } from "sonner";
+import { AI_PROMPT } from '@/constants/options';
 
 function CreateTrip() {
 
-  const [formData, setFormData] = useState([]);
+ const [formData, setFormData] = useState({});
+
 
 const handleInputChange =(name, value)   => {
     setFormData({
@@ -29,11 +30,17 @@ const handleInputChange =(name, value)   => {
     return;
   }
     // Handle the trip generation logic here
-    if (!formData?.days>10 && !formData?.budget || !formData?.travelers) {
-    
-       return;
+    if (formData?.days>10 && !formData?.budget || !formData?.location|| !formData?.travelers) {
+      toast("Please fill all details")
+       return
     }
-    console.log(formData);
+  const FINAL_PROMPT = AI_PROMPT
+  .replace('{location}', formData?.location)
+  .replace('{totaldays}', formData?.days)
+  .replace('{traveler}', formData?.travelers)
+  .replace('{budget}', formData?.budget);
+
+    console.log(FINAL_PROMPT);
   }
 
 
@@ -49,9 +56,25 @@ const handleInputChange =(name, value)   => {
           <h2 className='text-2xl font-bold'>Where are you planning to go?</h2>
           </div>
 
+          <div className="my-3 text-lg">
+  <select
+    className="w-full p-2 border rounded-lg"
+    onChange={(e) => handleInputChange('location', e.target.value)}
+    defaultValue=""
+  >
+    <option value="" disabled>Select a destination</option>
+    <option value="Manali">Manali</option>
+    <option value="Goa">Goa</option>
+    <option value="Kerala">Kerala</option>
+    <option value="Jaipur">Jaipur</option>
+    <option value="Ladakh">Ladakh</option>
+  </select>
+</div>
+
+
           <div>        
           
-          <h2 className='text-2xl mt-10 font-bold'>How many days are you planning the trip?</h2>
+          <h2 className='text-2xl mt-6 font-bold'>How many days are you planning the trip?</h2>
 
 <div className="text-xl my-3 font-medium">
   <Input
