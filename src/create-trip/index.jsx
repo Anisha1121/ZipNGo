@@ -4,12 +4,25 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { SelectBudgetOptions, SelectTravelList, AI_PROMPT } from "@/constants/options";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 function CreateTrip() {
   const [formData, setFormData] = useState({});
+
+  const [openDialog, setOpenDialog]= useState(false);
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -22,7 +35,21 @@ function CreateTrip() {
     console.log("Form Data Updated:", formData);
   }, [formData]);
 
+  const login = useGoogleLogin({
+    onSuccess:(codeResp)=>GetUserProfile(codeResp),
+    onError:(error)=>console.log(error)
+  })
+
   const OnGenerateTrip = async () => {
+    
+    const user = localStorage.getItem('user');
+
+    if(!user){
+      setOpenDialog(true)
+      return;
+    }
+
+
     if (!formData?.location || !formData?.days || !formData?.budget || !formData?.travelers) {
       toast("Please fill all details");
       return;
@@ -57,6 +84,18 @@ function CreateTrip() {
 }
 
   };
+
+  const GetUserProfile=(tokenInfo)=>{
+    axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`, {
+      headers:{
+      Authorization: `Bearer ${tokenInfo?.access_token}`, Accept: 'Application/json'}
+    }).then((resp)=>{
+      console.log(resp);
+      localStorage.setItem('user', JSON.stringify(resp.data));
+      setOpenDialog(false);
+      OnGenerateTrip();
+    })
+  }
 
   return (
     <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10">
@@ -135,6 +174,39 @@ function CreateTrip() {
       <div className="flex justify-end cursor-pointer my-10">
         <Button onClick={OnGenerateTrip}>Generate Trip</Button>
       </div>
+
+
+
+      <Dialog open={openDialog}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Sign in</DialogTitle>
+      <DialogDescription>
+        Use your Google account to authenticate securely.
+      </DialogDescription>
+    </DialogHeader>
+
+    <div className="flex flex-col items-center mt-4">
+      <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
+
+      <h2 className="font-bold text-lg mt-6 flex gap-2 items-center">
+        Sign In with Google
+      </h2>
+
+      <p className="text-sm text-muted-foreground mt-2 text-center">
+        Sign in to the app with Google authentication securely
+      </p>
+
+      <Button onClick={login} className="w-full mt-5 flex gap-2 justify-center items-center">
+        <FcGoogle className="h-6 w-6" />
+        Sign In with Google
+      </Button>
+    </div>
+  </DialogContent>
+</Dialog>
+
+
+
     </div>
   );
 }
