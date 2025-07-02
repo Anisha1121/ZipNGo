@@ -8,6 +8,7 @@ import Hotels from '../components/Hotels';
 import PlacesToVisit from '../components/PlacesToVisit';
 import Footer from '../components/Footer';
 
+
 function ViewTrip() {
  const { tripId } = useParams();
  

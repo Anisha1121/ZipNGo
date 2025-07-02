@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '../ui/button'
 function Header() {
+
+const user=JSON.parse(localStorage.getItem('user'));
+
+useEffect(()=>{
+  console.log(user)
+})
+
   return (
     <div className='p-2 shadow-sm flex justify-between items-center px-5'>
       <img src='/logo.svg'/>
      
      <div>
+      {user?
+      <div className='flex items-center gap-5'>
+        <Button variant="outline" className="rounded-full">My Trips</Button>
+        <img src={user?.picture} className='h-[35px] w-[35px] rounded-full'/>
+      </div>
+      :
       <Button className="shadow cursor-pointer">
         Sign In
       </Button>
+}
     </div>
 
     </div>

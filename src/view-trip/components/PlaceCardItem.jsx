@@ -38,7 +38,7 @@ function PlaceCardItem({ place }) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="border rounded-xl shadow-sm p-3 flex flex-row gap-4 bg-white transition hover:shadow-md">
+      <div className="border rounded-xl shadow-sm p-3 flex flex-row gap-4 bg-white hover:scale-105 transition-all cursor-pointer hover:shadow-md">
         <img
           src={photoUrl}
           alt={place.placeName}
