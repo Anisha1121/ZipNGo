@@ -30,7 +30,7 @@ function PlacesToVisit({ trip }) {
               <div key={index}>
                 <p className="text-sm text-orange-600 mb-1">
                    {place.
-exactTimeToVisit
+exactTime
  || 'Time N/A'}
                 </p>
                 <PlaceCardItem place={place} />

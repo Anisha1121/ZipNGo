@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { fetchPlaceDetails } from '@/service/GlobalApi';
 
 function HotelCardItem({ hotel }) {
-  const [photoUrl, setPhotoUrl] = useState(hotel?.HotelImageUrl || '/placeholder.jpg'); // fallback
+  const [photoUrl, setPhotoUrl] = useState(hotel?.hotelImageUrl || '/placeholder.jpg'); // fallback
 
   const getPlacePhoto = useCallback(async () => {
     try {
-      if (!hotel?.HotelName) return;
+      if (!hotel?.hotelName) return;
 
       const resp = await fetchPlaceDetails({
-        placeName: `${hotel.HotelName}, ${hotel.HotelAddress}`,
+        placeName: `${hotel.hotelName}, ${hotel.hotelAddress}`,
       });
 
       const photoName = resp?.data?.places?.[0]?.photos?.[0]?.name;
@@ -18,7 +18,7 @@ function HotelCardItem({ hotel }) {
         const url = `https://places.googleapis.com/v1/${photoName}/media?key=${import.meta.env.VITE_GOOGLE_PLACES_API}&maxWidthPx=400`;
         setPhotoUrl(url);
       } else {
-        console.warn('No Google photo found for:', hotel.HotelName);
+        console.warn('No Google photo found for:', hotel.hotelName);
       }
     } catch (err) {
       console.error('Google Places API failed:', err?.response?.data || err.message);
@@ -50,10 +50,10 @@ function HotelCardItem({ hotel }) {
         />
 
         <div className="p-3">
-          <h2 className="font-medium">{hotel.HotelName}</h2>
-          <h2 className="text-xs text-gray-500 my-1">📍 {hotel.HotelAddress}</h2>
-          <h2 className="text-xs text-gray-500 my-1">💵 ₹{hotel.PricePerNight}</h2>
-          <h2 className="text-xs text-gray-500 font-bold">⭐ {hotel.Rating}</h2>
+          <h2 className="font-medium">{hotel.hotelName}</h2>
+          <h2 className="text-xs text-gray-500 my-1">📍 {hotel.hotelAddress}</h2>
+          <h2 className="text-xs text-gray-500 my-1">💵 ₹{hotel.pricePerNight}</h2>
+          <h2 className="text-xs text-gray-500 font-bold">⭐ {hotel.rating}</h2>
         </div>
       </div>
     </Link>
