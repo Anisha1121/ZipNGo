@@ -48,4 +48,4 @@ export const SelectBudgetOptions = [
     icon: '💎',
   },
 ];
-export const AI_PROMPT='Generate Travel Plan for Location : {location}, for {totaldays} Days for {traveler} with a {budget} budget, Give me a Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and suggest itnerary with placeNam Details, Place Image Url, ticket Pricing, Time t travel in JSON format.'
+export const AI_PROMPT='Generate Travel Plan for Location : {location}, for {totaldays} Days for {traveler} with a {budget} budget, Give me a Hotel option list with HotelName, Hotel address, Price per night in rupees, hotel image url, geo coordinates, rating, descriptions and suggest itnerary with day(Day 1, Day 2...etc.), placeName, placeDetails, Place Image Url, Geo Cooordinates, ticket Pricing, exact time t to visit and required time to visit  strictly in JSON format. Do not write anything else in beginning. Respond with only a valid JSON object. Do NOT wrap it in triple backticks (```json) or add any markdown or explanation.'
