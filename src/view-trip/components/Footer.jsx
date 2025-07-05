@@ -10,7 +10,7 @@ function Footer() {
         <span>
           Created by{' '}
           <a
-            href="https://www.linkedin.com/in/anishadwivedi" // Replace with your real link
+            href="https://www.linkedin.com/in/anishadwivedi1121" // Replace with your real link
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-gray-600 transition"

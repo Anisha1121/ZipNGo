@@ -29,9 +29,7 @@ function PlacesToVisit({ trip }) {
             {placesByDay[dayKey].map((place, index) => (
               <div key={index}>
                 <p className="text-sm text-orange-600 mb-1">
-                   {place.
-exactTime
- || 'Time N/A'}
+                   {place.exactTime || 'Time N/A'}
                 </p>
                 <PlaceCardItem place={place} />
               </div>

@@ -16,7 +16,7 @@ const [photoUrl, setPhotoUrl]=useState();
       };
 
       const resp = await fetchPlaceDetails(data);
-      console.log(resp.data.places[0].photos[3].name);
+      console.log(resp.data.places[0].photos[7].name);
 
       const PhotoUrl=PHOTO_REF_URL.replace('{NAME}',resp.data.places[0].photos[3].name);
       setPhotoUrl(PhotoUrl)

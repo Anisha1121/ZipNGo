@@ -48,4 +48,56 @@ export const SelectBudgetOptions = [
     icon: '💎',
   },
 ];
-export const AI_PROMPT='Generate Travel Plan for Location : {location}, for {totaldays} Days for {traveler} with a {budget} budget, Give me a Hotel option list with HotelName, Hotel address, Price per night in rupees, hotel image url, geo coordinates, rating, descriptions and suggest itnerary with day(Day 1, Day 2...etc.), placeName, placeDetails, Place Image Url, Geo Cooordinates, ticket Pricing, exact time t to visit and required time to visit  strictly in JSON format. Do not write anything else in beginning. Respond with only a valid JSON object. Do NOT wrap it in triple backticks (```json) or add any markdown or explanation.'
+export const AI_PROMPT = `Generate a detailed travel plan for:
+- Location: {location}
+- Duration: {totaldays} Days
+- Travelers: {traveler}
+- Budget: {budget}
+
+Return only a valid JSON object with the following **top-level keys**:
+
+1. hotels (Array of 3 hotel objects)
+2. itinerary (Array of {totaldays} itinerary objects)
+3. userSelection (Object containing user inputs)
+
+❗ DO NOT nest hotels and itinerary inside another object like "tripData".
+❗ DO NOT include any outer wrapper like "tripData" or "response".
+❗ Use ONLY the top-level keys exactly as follows:
+- hotels
+- itinerary
+- userSelection
+
+Each hotel object must contain:
+- hotelName (string)
+- hotelAddress (string)
+- hotelImageUrl (string)
+- geoCoordinates: { latitude (number), longitude (number) }
+- pricePerNight (number, in rupees)
+- rating (number, 1–5 scale)
+- description (string)
+
+Each itinerary object must contain:
+- day (e.g. "Day 1")
+- exactTime (e.g. "9:00 AM")
+- placeName (string)
+- placeDetails (string)
+- placeImageUrl (string)
+- geoCoordinates: { latitude (number), longitude (number) }
+- ticketPricing (string)
+- requiredTime (e.g. "2 hours")
+
+userSelection object must include:
+- userEmail (string)
+- location (string)
+- days (number)
+- travelers (string)
+- budget (string)
+
+⚠️ STRICT RULES:
+- Return ONLY a valid JSON object. No markdown, no triple backticks, no extra text.
+- Use **camelCase keys exactly as described above**.
+- DO NOT include any wrapper key like "tripData".
+
+Respond only with a valid JSON object in the exact format above.`;
+
+

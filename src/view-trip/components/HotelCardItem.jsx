@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { fetchPlaceDetails } from '@/service/GlobalApi';
 
 function HotelCardItem({ hotel }) {
-  const [photoUrl, setPhotoUrl] = useState(hotel?.hotelImageUrl || '/placeholder.jpg'); // fallback
+  const [photoUrl, setPhotoUrl] = useState(hotel?.hotelImageUrl || '/placeholder.jpg');
 
   const getPlacePhoto = useCallback(async () => {
     try {
-      if (!hotel?.hotelName) return;
+      if (!hotel?.hotelName || !hotel?.hotelAddress) return;
 
       const resp = await fetchPlaceDetails({
         placeName: `${hotel.hotelName}, ${hotel.hotelAddress}`,
@@ -17,8 +17,6 @@ function HotelCardItem({ hotel }) {
       if (photoName) {
         const url = `https://places.googleapis.com/v1/${photoName}/media?key=${import.meta.env.VITE_GOOGLE_PLACES_API}&maxWidthPx=400`;
         setPhotoUrl(url);
-      } else {
-        console.warn('No Google photo found for:', hotel.hotelName);
       }
     } catch (err) {
       console.error('Google Places API failed:', err?.response?.data || err.message);
@@ -29,31 +27,35 @@ function HotelCardItem({ hotel }) {
     getPlacePhoto();
   }, [getPlacePhoto]);
 
-  if (!hotel) {
-    console.warn('HotelCardItem received undefined hotel');
+  if (!hotel || !hotel.hotelName || !hotel.hotelAddress) {
+    console.warn('Skipping invalid hotel:', hotel);
     return null;
   }
 
   return (
     <Link
       to={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        `${hotel.HotelName}, ${hotel.HotelAddress}`
+        `${hotel.hotelName}, ${hotel.hotelAddress}`
       )}`}
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="rounded-xl shadow-md overflow-hidden hover:scale-105 transition-all cursor-pointer">
+      <div className="rounded-xl shadow-md overflow-hidden hover:scale-105 transition-all cursor-pointer bg-white">
         <img
           src={photoUrl}
-          alt={hotel.HotelName}
+          alt={hotel.hotelName || 'Hotel'}
           className="h-[200px] w-full object-cover"
+          onError={(e) => (e.target.src = '/placeholder.jpg')}
         />
-
         <div className="p-3">
-          <h2 className="font-medium">{hotel.hotelName}</h2>
-          <h2 className="text-xs text-gray-500 my-1">📍 {hotel.hotelAddress}</h2>
-          <h2 className="text-xs text-gray-500 my-1">💵 ₹{hotel.pricePerNight}</h2>
-          <h2 className="text-xs text-gray-500 font-bold">⭐ {hotel.rating}</h2>
+          <h2 className="font-medium text-md">{hotel.hotelName}</h2>
+          <p className="text-xs text-gray-500 mt-1">📍 {hotel.hotelAddress}</p>
+          {hotel?.pricePerNight && (
+            <p className="text-xs text-gray-600">💵 ₹{hotel.pricePerNight}</p>
+          )}
+          {hotel?.rating && (
+            <p className="text-xs text-yellow-600 font-semibold">⭐ {hotel.rating}</p>
+          )}
         </div>
       </div>
     </Link>
