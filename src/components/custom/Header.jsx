@@ -88,16 +88,21 @@ const Header = () => {
    *  Render
    * ------------------------------------------------------------------ */
   return (
-    <header className="p-2 shadow-sm flex justify-between items-center px-5">
-      <img src="/logo.svg" alt="App logo" />
+    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md shadow-md px-2 py-1 flex justify-between items-center">
+  <div className="flex items-center gap-1">
+    <img src="/21.png" alt="ZipNGo Logo" className="h-18 w-18 object-contain" />
+    <h1 className="text-xl font-bold text-gray-800">ZipNGo</h1>
+  </div>
 
-      {user ? (
-        <div className="flex items-center gap-5">
-          <a href='/my-trips'>
-          <Button variant="outline" className="rounded-full">
-            My Trips
-          </Button>
-</a>
+  {user ? (
+    <div className="flex items-center gap-4">
+  <a href="/my-trips">
+    <Button
+      className="px-6 py-2.5 rounded-full text-white font-semibold backdrop-blur-md bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 shadow-md hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out border border-white/30"
+    >
+       My Trips
+    </Button>
+  </a>
           <Popover>
             <PopoverTrigger asChild>
               <img

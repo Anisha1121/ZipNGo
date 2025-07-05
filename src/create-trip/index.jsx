@@ -125,7 +125,7 @@ function CreateTrip() {
   };
 
   return (
-    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10">
+    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10 ">
       <h2 className="text-4xl font-bold">Tell us about your travel preferences 🎕️🌴</h2>
       <p className="text-xl text-gray-600">
         Just provide us with some details about your ideal trip, and we'll create a personalized itinerary just for you.
@@ -148,35 +148,51 @@ function CreateTrip() {
           className="text-xl my-3 font-medium"
         />
 
-        <h2 className="text-2xl my-3 font-bold">What is your budget for the trip?</h2>
-        <div className="grid grid-cols-3 gap-5 mt-5">
-          {SelectBudgetOptions.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleInputChange("budget", item.title)}
-              className={`py-1 cursor-pointer space-y-1 px-3 text-xl hover:shadow-2xl hover:bg-gray-50 border rounded-lg ${formData.budget === item.title ? "bg-gray-100 border-black" : ""}`}
-            >
-              <h2 className="text-4xl">{item.icon}</h2>
-              <h2 className="font-bold">{item.title}</h2>
-              <h2 className="text-gray-500">{item.desc}</h2>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-2xl my-3 font-bold text-gray-800">What is your budget for the trip?</h2>
 
-        <h2 className="text-2xl mt-5 font-bold">Let us know how many travelers you're planning for.</h2>
-        <div className="grid grid-cols-3 gap-5 mt-5">
-          {SelectTravelList.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleInputChange("travelers", item.people)}
-              className={`py-2 cursor-pointer space-y-1 px-3.5 text-xl hover:shadow-2xl hover:bg-gray-50 border rounded-lg ${formData.travelers === item.people ? "bg-gray-100 border-black" : ""}`}
-            >
-              <h2 className="text-4xl">{item.icon}</h2>
-              <h2 className="font-bold">{item.title}</h2>
-              <h2 className="text-xl text-gray-500">{item.desc}</h2>
-            </div>
-          ))}
-        </div>
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
+  {SelectBudgetOptions.map((item, index) => (
+    <div
+      key={index}
+      onClick={() => handleInputChange("budget", item.title)}
+      className={`cursor-pointer p-5 rounded-2xl border shadow-sm transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 hover:border-indigo-400
+        ${
+          formData.budget === item.title
+            ? "bg-gradient-to-br from-indigo-100 via-blue-50 to-teal-100 border-indigo-500 shadow-lg"
+            : "bg-white"
+        }`}
+    >
+      <div className="text-4xl mb-2">{item.icon}</div>
+      <h3 className="font-semibold text-lg text-gray-800">{item.title}</h3>
+      <p className="text-sm text-gray-500">{item.desc}</p>
+    </div>
+  ))}
+</div>
+
+
+        <h2 className="text-2xl mt-8 font-bold text-gray-800">
+  Let us know how many travelers you're planning for.
+</h2>
+
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
+  {SelectTravelList.map((item, index) => (
+    <div
+      key={index}
+      onClick={() => handleInputChange("travelers", item.people)}
+      className={`cursor-pointer p-5 rounded-2xl border shadow-sm transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 hover:border-indigo-400
+        ${
+          formData.travelers === item.people
+            ? "bg-gradient-to-br from-indigo-100 via-blue-50 to-teal-100 border-indigo-500 shadow-lg"
+            : "bg-white"
+        }`}
+    >
+      <div className="text-4xl mb-2">{item.icon}</div>
+      <h3 className="font-semibold text-lg text-gray-800">{item.title}</h3>
+      <p className="text-sm text-gray-500">{item.desc}</p>
+    </div>
+  ))}
+</div>
+
       </div>
 
       <div className="flex justify-end cursor-pointer my-10">
