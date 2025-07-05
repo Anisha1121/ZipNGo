@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { SelectBudgetOptions, SelectTravelList, AI_PROMPT } from "@/constants/options";
+import PlacesAutocomplete from "@/components/PlacesAutcomplete";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   Dialog,
@@ -132,20 +133,12 @@ function CreateTrip() {
 
       <div className="mt-20">
         <h2 className="text-2xl font-bold">Where are you planning to go?</h2>
-        <div className="my-3 text-lg">
-          <select
-            className="w-full p-2 border rounded-lg"
-            onChange={(e) => handleInputChange("location", e.target.value)}
-            defaultValue=""
-          >
-            <option value="" disabled>Select a destination</option>
-            <option value="Manali">Manali</option>
-            <option value="Goa">Goa</option>
-            <option value="Kerala">Kerala</option>
-            <option value="Jaipur">Jaipur</option>
-            <option value="Ladakh">Ladakh</option>
-          </select>
-        </div>
+<div className="my-3 text-lg">
+  <PlacesAutocomplete
+    onSelect={(city) => handleInputChange("location", city.place_name)}
+  />
+</div>
+
 
         <h2 className="text-2xl mt-6 font-bold">How many days are you planning the trip?</h2>
         <Input

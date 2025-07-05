@@ -42,7 +42,9 @@ const GetPlacePhoto = React.useCallback(async () => {
       <img src={photoUrl?photoUrl: "/placeholder.jpg"} className="object-cover rounded-md w-full h-40" />
       <div className="mt-2">
         <h2 className="font-semibold text-lg">
-          {trip?.userSelection?.location || "Unknown Destination"}
+          {typeof trip?.userSelection?.location === 'object'
+            ? trip?.userSelection?.location?.place_name || "Unknown Destination"
+            : trip?.userSelection?.location || "Unknown Destination"}
         </h2>
         <h2 className='text-sm text-gray-500'>
           📅{trip?.userSelection?.days} days trip with 👥{trip?.userSelection?.travelers} people with 💰{trip?.userSelection?.budget} budget
