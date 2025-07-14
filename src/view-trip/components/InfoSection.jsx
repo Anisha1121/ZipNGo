@@ -29,6 +29,23 @@ const [photoUrl, setPhotoUrl]=useState();
     trip && GetPlacePhoto();
   }, [trip, GetPlacePhoto]);
 
+  const handleShare = () => {
+    const tripUrl = window.location.href;
+    const shareData = {
+      title: 'Check out my trip!',
+      text: `Trip to ${trip?.userSelection?.location} for ${trip?.userSelection?.days} days with ${trip?.userSelection?.travelers} travelers and a budget of ${trip?.userSelection?.budget}.`,
+      url: tripUrl
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch((err) => {
+        console.error('Share failed:', err);
+      });
+    } else {
+      navigator.clipboard.writeText(tripUrl);
+      alert('Trip link copied to clipboard!');
+    }
+  };
+
   if (!trip) return null;
 
   return (
@@ -51,7 +68,7 @@ const [photoUrl, setPhotoUrl]=useState();
             </h2>
           </div>
         </div>
-        <Button><IoIosSend /></Button>
+        <Button onClick={handleShare}><IoIosSend /></Button>
       </div>
     </div>
   )
