@@ -8,7 +8,9 @@ import { useState } from 'react'
 
 const PHOTO_REF_URL='https://places.googleapis.com/v1/{NAME}/media?maxHeightPx=1000&maxWidthPx=1000&key='+import.meta.env.VITE_GOOGLE_PLACES_API
 function InfoSection({ trip }) {
-const [photoUrl, setPhotoUrl]=useState();
+  const [photoUrl, setPhotoUrl] = useState();
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [videoLoading, setVideoLoading] = useState(false);
   const GetPlacePhoto = React.useCallback(async () => {
     try {
       const data = {
@@ -46,6 +48,18 @@ const [photoUrl, setPhotoUrl]=useState();
     }
   };
 
+
+  // Mock video generation function
+  const handleGenerateVideo = async () => {
+    setVideoLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      // Use a sample video URL (royalty-free stock video)
+      setVideoUrl('https://www.w3schools.com/html/mov_bbb.mp4');
+      setVideoLoading(false);
+    }, 2500);
+  };
+
   if (!trip) return null;
 
   return (
@@ -68,8 +82,19 @@ const [photoUrl, setPhotoUrl]=useState();
             </h2>
           </div>
         </div>
-        <Button onClick={handleShare}><IoIosSend /></Button>
+        <div className="flex flex-col gap-2 items-end">
+          <Button onClick={handleShare}><IoIosSend /></Button>
+          <Button onClick={handleGenerateVideo} disabled={videoLoading} className="mt-2 bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+            {videoLoading ? 'Generating Video...' : 'Generate Trip Video'}
+          </Button>
+        </div>
       </div>
+      {videoUrl && (
+        <div className="mt-6">
+          <h3 className="font-semibold text-lg mb-2">Your Trip Video</h3>
+          <video controls width="100%" src={videoUrl} className="rounded-xl shadow-lg" />
+        </div>
+      )}
     </div>
   )
 }

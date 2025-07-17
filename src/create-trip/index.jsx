@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { SelectBudgetOptions, SelectTravelList, AI_PROMPT } from "@/constants/options";
+import { SelectBudgetOptions, SelectTravelList } from "@/constants/options";
 import PlacesAutocomplete from "@/components/PlacesAutcomplete";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   Dialog,
   DialogContent,
@@ -15,17 +14,17 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { setDoc, doc } from "firebase/firestore";
-import { db } from "@/service/firebaseConfig";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_AI_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// Import travel images
+import img1 from "@/assets/1.jpg";
+import img2 from "@/assets/2.jpg";
+import img3 from "@/assets/3.jpg";
+import img4 from "@/assets/4.jpg";
+import img5 from "@/assets/5.jpg";
 
 function CreateTrip() {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const navigate = useNavigate();
   const handleInputChange = (name, value) => {
@@ -42,6 +41,7 @@ function CreateTrip() {
   });
 
   const OnGenerateTrip = async () => {
+    console.log("Generate Trip button clicked!"); // Debug log
     const user = localStorage.getItem("user");
     if (!user) {
       setOpenDialog(true);
@@ -58,55 +58,18 @@ function CreateTrip() {
       return;
     }
 
-    setLoading(true);
-    const FINAL_PROMPT = AI_PROMPT
-      .replace("{location}", formData.location)
-      .replace("{totaldays}", formData.days)
-      .replace("{traveler}", formData.travelers)
-      .replace("{budget}", formData.budget) +
-      "\n\nRespond ONLY with a valid JSON object. Do NOT include markdown or explanation.";
-
+    console.log("Navigating to generating-trip page..."); // Debug log
+    // Navigate to generating page with form data
     try {
-      const result = await model.generateContent(FINAL_PROMPT);
-      const response = result.response;
-      let text = await response.text();
-
-      console.log("Raw AI response text:", text);
-
-      // Strip markdown (```json) if added
-      text = text
-        .replace(/```json/g, '')
-        .replace(/```/g, '')
-        .replace(/^\s*json\s*/gi, '')
-        .trim();
-
-      const jsonStart = text.indexOf("{");
-      const jsonEnd = text.lastIndexOf("}");
-      const jsonString = text.slice(jsonStart, jsonEnd + 1);
-
-      const parsedData = JSON.parse(jsonString);
-      console.log("Parsed AI JSON:", parsedData);
-      SaveAITrip(parsedData);
+      navigate('/generating-trip', {
+        state: {
+          formData: formData
+        }
+      });
     } catch (error) {
-      console.error("Gemini API Error:", error);
-      toast.error("\u274C Failed to generate trip. Try again.");
-    } finally {
-      setLoading(false);
+      console.error("Navigation error:", error);
+      toast.error("Navigation failed. Please try again.");
     }
-  };
-
-  const SaveAITrip = async (TripData) => {
-    setLoading(true);
-    const user = JSON.parse(localStorage.getItem("user"));
-    const docId = Date.now().toString();
-    await setDoc(doc(db, "AITrips", docId), {
-      userSelection: formData,
-      tripData: TripData, // already parsed JSON
-      userEmail: user?.email,
-      id: docId
-    });
-    setLoading(false);
-    navigate('/view-trip/'+docId);
   };
 
   const GetUserProfile = (tokenInfo) => {
@@ -119,17 +82,80 @@ function CreateTrip() {
       })
       .then((resp) => {
         localStorage.setItem("user", JSON.stringify(resp.data));
+        // Dispatch custom event to notify Header component
+        window.dispatchEvent(new CustomEvent('userSignIn', { detail: resp.data }));
         setOpenDialog(false);
         OnGenerateTrip();
       });
   };
 
   return (
-    <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10 ">
-      <h2 className="text-4xl font-bold">Tell us about your travel preferences 🎕️🌴</h2>
-      <p className="text-xl text-gray-600">
-        Just provide us with some details about your ideal trip, and we'll create a personalized itinerary just for you.
-      </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 pt-10 pb-20">
+        <h2 className="text-4xl font-bold text-center">Tell us about your travel preferences 🎕️🌴</h2>
+        
+        <p className="text-xl text-gray-600 text-center mt-4">
+          Just provide us with some details about your ideal trip, and we'll create a personalized itinerary just for you.
+        </p>
+
+        {/* Travel Inspiration Background */}
+        <div className="mt-12 mb-16 relative">
+          <h3 className="text-2xl font-semibold text-center mb-6 text-gray-700">✨ Get Inspired by Amazing Destinations</h3>
+          
+          {/* Background Image Mosaic */}
+          <div className="relative h-64 rounded-2xl overflow-hidden shadow-2xl">
+            {/* Background Images */}
+            <div className="absolute inset-0 grid grid-cols-5 opacity-80">
+              <div 
+                className="bg-cover bg-center transition-all duration-700 hover:scale-110" 
+                style={{backgroundImage: `url(${img1})`}}
+              ></div>
+              <div 
+                className="bg-cover bg-center transition-all duration-700 hover:scale-110" 
+                style={{backgroundImage: `url(${img2})`}}
+              ></div>
+              <div 
+                className="bg-cover bg-center transition-all duration-700 hover:scale-110" 
+                style={{backgroundImage: `url(${img3})`}}
+              ></div>
+              <div 
+                className="bg-cover bg-center transition-all duration-700 hover:scale-110" 
+                style={{backgroundImage: `url(${img4})`}}
+              ></div>
+              <div 
+                className="bg-cover bg-center transition-all duration-700 hover:scale-110" 
+                style={{backgroundImage: `url(${img5})`}}
+              ></div>
+            </div>
+            
+            {/* Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
+            
+            {/* Content */}
+            <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-8">
+              <h2 className="text-4xl font-bold text-center mb-4 drop-shadow-lg">
+                Plan Your Perfect Adventure
+              </h2>
+              <p className="text-xl text-center opacity-90 drop-shadow-md">
+                From tropical beaches to mountain peaks - your dream destination awaits
+              </p>
+              <div className="flex gap-6 mt-6">
+                <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                  🏖️ Beaches
+                </span>
+                <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                  🏔️ Mountains
+                </span>
+                <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                  🏙️ Cities
+                </span>
+                <span className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+                  🌲 Nature
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
       <div className="mt-20">
         <h2 className="text-2xl font-bold">Where are you planning to go?</h2>
@@ -195,9 +221,13 @@ function CreateTrip() {
 
       </div>
 
-      <div className="flex justify-end cursor-pointer my-10">
-        <Button disabled={loading} onClick={OnGenerateTrip}>
-          {loading ? <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" /> : 'Generate Trip'}
+      <div className="flex justify-end my-10">
+        <Button onClick={() => {
+          console.log("Button clicked!");
+          console.log("Form data:", formData);
+          OnGenerateTrip();
+        }} className="cursor-pointer">
+          Generate Trip
         </Button>
       </div>
 
@@ -209,13 +239,14 @@ function CreateTrip() {
               <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
               <h2 className="font-bold text-lg mt-6 flex gap-2 items-center">Sign In with Google</h2>
               <p className="text-sm text-muted-foreground mt-2 text-center">Sign in to the app with Google authentication securely</p>
-              <Button disabled={loading} onClick={login} className="w-full mt-5 flex gap-2 justify-center items-center">
-                {loading ? "Signing in..." : <><FcGoogle className="h-6 w-6" /> Sign In with Google</>}
+              <Button onClick={login} className="w-full mt-5 flex gap-2 justify-center items-center">
+                <FcGoogle className="h-6 w-6" /> Sign In with Google
               </Button>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

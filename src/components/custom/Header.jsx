@@ -63,7 +63,7 @@ const Header = () => {
   });
 
   /** ------------------------------------------------------------------
-   *  Keep React state in‑sync if user logs in/out in another tab
+   *  Keep React state in‑sync if user logs in/out in another tab or component
    * ------------------------------------------------------------------ */
   useEffect(() => {
     const syncUserAcrossTabs = (e) => {
@@ -71,8 +71,22 @@ const Header = () => {
         setUser(e.newValue ? JSON.parse(e.newValue) : null);
       }
     };
+
+    const handleUserSignIn = (e) => {
+      // Update user state immediately when sign-in happens in any component
+      const userData = e.detail || JSON.parse(localStorage.getItem("user") || "null");
+      setUser(userData);
+    };
+
+    // Listen for storage changes (cross-tab sync)
     window.addEventListener("storage", syncUserAcrossTabs);
-    return () => window.removeEventListener("storage", syncUserAcrossTabs);
+    // Listen for custom sign-in event (same-tab sync)
+    window.addEventListener("userSignIn", handleUserSignIn);
+    
+    return () => {
+      window.removeEventListener("storage", syncUserAcrossTabs);
+      window.removeEventListener("userSignIn", handleUserSignIn);
+    };
   }, []);
 
   /** ------------------------------------------------------------------
@@ -88,21 +102,39 @@ const Header = () => {
    *  Render
    * ------------------------------------------------------------------ */
   return (
-    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md shadow-md px-2 py-1 flex justify-between items-center">
-  <div className="flex items-center gap-1">
-    <img src="/21.png" alt="ZipNGo Logo" className="h-18 w-18 object-contain" />
-    <h1 className="text-xl font-bold text-gray-800">ZipNGo</h1>
+    <header className="sticky top-0 z-50 bg-slate-700 backdrop-blur-lg shadow-xl border-b border-white/20 px-2 py-0.5 flex justify-between items-center">
+  <div className="flex items-center gap-3">
+    <div className="relative">
+      <img 
+        src="/21.png" 
+        alt="ZipNGo Logo" 
+        className="h-12 w-12 object-contain drop-shadow-xl hover:scale-110 transition-transform duration-300 ease-in-out filter brightness-110 contrast-110" 
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-transparent to-cyan-400/20 rounded-full blur-sm"></div>
+    </div>
+    <h1 className="text-2xl font-black text-transparent bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text drop-shadow-lg tracking-wider">
+      Zip<span className="text-blue-300">N</span>Go
+    </h1>
   </div>
 
   {user ? (
     <div className="flex items-center gap-4">
-  <a href="/my-trips">
-    <Button
-      className="px-6 py-2.5 rounded-full text-white font-semibold backdrop-blur-md bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 shadow-md hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out border border-white/30"
-    >
-       My Trips
-    </Button>
-  </a>
+      {typeof window !== 'undefined' && window.location.pathname === '/my-trips' && (
+        <a href="/create-trip">
+          <Button
+            className="px-6 py-2.5 rounded-full text-white font-semibold backdrop-blur-md bg-gradient-to-r from-green-400 via-blue-400 to-indigo-500 shadow-md hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out border border-white/30"
+          >
+            +Create Trip
+          </Button>
+        </a>
+      )}
+      <a href="/my-trips">
+        <Button
+          className="px-6 py-2.5 rounded-full text-white font-semibold backdrop-blur-md bg-gradient-to-r from-indigo-500 via-blue-400 to-teal-400 shadow-md hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out border border-white/30"
+        >
+          My Trips
+        </Button>
+      </a>
           <Popover>
             <PopoverTrigger asChild>
               <img
@@ -122,11 +154,10 @@ const Header = () => {
           </Popover>
         </div>
       ) : (
-        <Button onClick={() => setOpenDialog(true)} className="shadow">
+        <Button onClick={() => setOpenDialog(true)}>
           Sign In
         </Button>
       )}
-
       {/* ----------------------------------------------------------------
           Sign‑in modal
          ---------------------------------------------------------------- */}
