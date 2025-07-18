@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom';
 import{ doc, getDoc } from 'firebase/firestore'
 import { db } from '@/service/firebaseConfig';
@@ -14,11 +14,7 @@ function ViewTrip() {
  
  const [trip, setTrip] = useState([]);
 
- useEffect(()=>{
-    tripId && GetTripdata();
-  }, [tripId])
-
-const GetTripdata = async()=>{
+const GetTripdata = useCallback(async()=>{
   const docRef=doc(db, 'AITrips',tripId);
   const docSnap=await getDoc (docRef);
   if(docSnap.exists())
@@ -30,9 +26,14 @@ const GetTripdata = async()=>{
     console.log("No such Document");
     toast('No Trip Found')
   }
-}
+}, [tripId])
+
+ useEffect(()=>{
+    tripId && GetTripdata();
+  }, [tripId, GetTripdata])
   return (
-    <div className='p-10 md:px-20 lg:px-44 xl:px-56'>
+    <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100'>
+      <div className='p-10 md:px-20 lg:px-44 xl:px-56'>
      {/* INFORMATION SECTION */}
      <InfoSection trip = {trip}/>
 
@@ -46,6 +47,7 @@ const GetTripdata = async()=>{
      <Footer trip={trip}/>
 
 
+      </div>
     </div>
   );
 }

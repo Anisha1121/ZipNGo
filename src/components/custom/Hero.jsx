@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Link } from 'react-router-dom';
 
 function Hero() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div className='min-h-screen relative overflow-hidden'>
+      {/* Loading placeholder with gradient background */}
+      {!imageLoaded && (
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900"
+          style={{ zIndex: 0 }}
+        />
+      )}
+      
       <img 
         src="/bg.jpg" 
         alt="Background" 
+        loading="eager"
         style={{
           position: 'absolute',
           top: '-40%',
@@ -15,10 +26,18 @@ function Hero() {
           width: '100%',
           height: '140%',
           objectFit: 'cover',
-          zIndex: 1
+          zIndex: 1,
+          opacity: imageLoaded ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out'
         }}
-        onError={(e) => console.log('Image failed to load:', e)}
-        onLoad={() => console.log('Image loaded successfully')}
+        onError={(e) => {
+          console.log('Image failed to load:', e);
+          setImageLoaded(true); // Show content even if image fails
+        }}
+        onLoad={() => {
+          console.log('Image loaded successfully');
+          setImageLoaded(true);
+        }}
       />
       <div style={{ position: 'relative', zIndex: 3 }} className='flex flex-col items-center mx-56 gap-9 min-h-screen justify-center'>
       <h1 className='text-[50px] font-extrabold text-center mt-16 text-white drop-shadow-lg'>

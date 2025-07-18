@@ -33,17 +33,20 @@ function MyTrips() {
 };
 
 
-  return <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 mt-10">
-    <h2 className="font-bold text-3xl">
-      My Trips
-    </h2 >
-    <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-5">
-      {userTrips.map((trip)=>(
-        <UserTripCardItem trip={trip} />
-      ))}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="sm:px-10 md:px-32 lg:px-56 xl:px-72 px-5 pt-10">
+        <h2 className="font-bold text-3xl">
+          My Trips
+        </h2>
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-5">
+          {userTrips.map((trip)=>(
+            <UserTripCardItem trip={trip} />
+          ))}
+        </div>
+      </div>
     </div>
-      
-    </div>;
+  );
 }
 
 export default MyTrips;
