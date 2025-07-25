@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
+import ResetAccount from "./ResetAccount";
 
 import {
   Dialog,
@@ -143,13 +144,38 @@ const Header = () => {
                 className="h-[35px] w-[35px] rounded-full cursor-pointer"
               />
             </PopoverTrigger>
-            <PopoverContent className="w-32">
-              <p
-                className="cursor-pointer text-sm font-medium"
-                onClick={handleLogout}
-              >
-                Logout
-              </p>
+            <PopoverContent className="w-48 p-2">
+              <div className="space-y-2">
+                <div className="px-2 py-1.5 text-sm">
+                  <div className="font-medium text-gray-900 truncate">
+                    {user.name}
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">
+                    {user.email}
+                  </div>
+                </div>
+                
+                <hr className="border-gray-200" />
+                
+                <div className="space-y-1">
+                  <ResetAccount 
+                    user={user} 
+                    onAccountReset={() => {
+                      // Callback to refresh the page or redirect after reset
+                      window.location.href = '/my-trips';
+                    }} 
+                  />
+                  
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              </div>
             </PopoverContent>
           </Popover>
         </div>

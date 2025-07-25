@@ -8,15 +8,16 @@ function Footer() {
         <FaCopyright className="text-xs" />
         {new Date().getFullYear()} &nbsp;
         <span>
-          Created by{' '}
+          Born from my heart, built for yours ❤️ — by{' '}
           <a
-            href="https://www.linkedin.com/in/anishadwivedi1121" // Replace with your real link
+            href="https://www.linkedin.com/in/anishadwivedi1121"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-gray-600 transition"
           >
-            Anisha Dwivedi
+             Anisha Dwivedi
           </a>
+          , for those who find home in the journey!
         </span>
       </h2>
     </div>
