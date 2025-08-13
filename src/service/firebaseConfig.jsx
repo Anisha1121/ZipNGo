@@ -7,15 +7,16 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC5Drq4FRqCl52nODyblDh1i153RXjfqpE",
-  authDomain: "zipngo-bde8f.firebaseapp.com",
-  projectId: "zipngo-bde8f",
-  storageBucket: "zipngo-bde8f.firebasestorage.app",
-  messagingSenderId: "185293717087",
-  appId: "1:185293717087:web:0263cb7a50e556c9da65ea",
-  measurementId: "G-ZQBL6ELXJK"
+  apiKey: "AIzaSyDPUbHJVmVnsNZXXuvHs-z7YR8k4Nsc7To",
+  authDomain: "zipngo-a5098.firebaseapp.com",
+  projectId: "zipngo-a5098",
+  storageBucket: "zipngo-a5098.firebasestorage.app",
+  messagingSenderId: "992272641561",
+  appId: "1:992272641561:web:a80cdba07dc4397e84c488",
+  measurementId: "G-ZZXXLD69XN"
 };
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+
 export const db = getFirestore(app);
